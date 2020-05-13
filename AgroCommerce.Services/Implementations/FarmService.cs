@@ -28,7 +28,7 @@ namespace AgroCommerce.Services.Implementations
             return _uow.FarmRepo.GetAll();
         }
 
-        public Farm GetById(long Id)
+        public Farm GetByID(long Id)
         {
             return _uow.FarmRepo.Get(Id);
         }
