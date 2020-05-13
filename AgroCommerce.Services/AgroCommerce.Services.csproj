@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AgroCommerce.Core\AgroCommerce.Core.csproj" />
+    <ProjectReference Include="..\AgroCommerce.Data\AgroCommerce.Data.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-AgroCommerce-C109A6F6-D849-4A66-995A-1D3BD7AD5AE2</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\AgroCommerce.Core\AgroCommerce.Core.csproj" />
+    <ProjectReference Include="..\AgroCommerce.Data\AgroCommerce.Data.csproj" />
+    <ProjectReference Include="..\AgroCommerce.Services\AgroCommerce.Services.csproj" />
+  </ItemGroup>
+
+</Project>
