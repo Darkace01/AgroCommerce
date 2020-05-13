@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
   </ItemGroup>
 
 
@@ -17,6 +18,11 @@
     <ProjectReference Include="..\AgroCommerce.Core\AgroCommerce.Core.csproj" />
     <ProjectReference Include="..\AgroCommerce.Data\AgroCommerce.Data.csproj" />
     <ProjectReference Include="..\AgroCommerce.Services\AgroCommerce.Services.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
