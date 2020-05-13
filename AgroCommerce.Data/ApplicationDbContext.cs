@@ -22,5 +22,17 @@ namespace AgroCommerce.Data
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<Review> Review { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.Transactions);
+            builder.Entity<Transaction>()
+                .HasOne(y => y.Buyer);
+            builder.Entity<Transaction>()
+                .HasOne(z => z.Seller);
+                
+        }
+
     }
 }
