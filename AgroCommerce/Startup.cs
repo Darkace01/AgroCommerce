@@ -13,6 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using AgroCommerce.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AgroCommerce.Core;
+using AgroCommerce.Data.Contracts;
+using AgroCommerce.Data.Implementations;
+using AgroCommerce.Services.Contracts;
+using AgroCommerce.Services.Implementations;
 
 namespace AgroCommerce
 {
@@ -35,12 +40,29 @@ namespace AgroCommerce
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<SignInManager<ApplicationUser>, SignInManager<ApplicationUser>>();
+            services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped(serviceType: typeof(IUnitOfWork), implementationType: typeof(UnitOfWork));
+
+            //repos
+            services.AddScoped(serviceType: typeof(ICoreRepo<>), implementationType: typeof(CoreRepo<>));
+
+            //services
+            services.AddScoped(serviceType: typeof(IFarmService), implementationType: typeof(FarmService));
+            services.AddScoped(serviceType: typeof(IAnimalTypeService), implementationType: typeof(AnimalTypeService));
+            services.AddScoped(serviceType: typeof(IListingService), implementationType: typeof(ListingService));
+            services.AddScoped(serviceType: typeof(ILocationMgtService), implementationType: typeof(LocationMgtService));
+            services.AddScoped(serviceType: typeof(IReviewService), implementationType: typeof(ReviewService));
+            services.AddScoped(serviceType: typeof(ITransactionService), implementationType: typeof(TransactionService));
+            services.AddScoped(serviceType: typeof(IUserAccountService), implementationType: typeof(UserAccountService));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
