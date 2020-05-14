@@ -2,7 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    @if(ViewBag.ActiveFeaturedLis != null){
+    <div class="card" style="width: 18rem;">
+        <img src="@Url.Content(ViewBag.ActiveFeaturedList.ImagePath)" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@ViewBag.ActiveFeaturedList.Title</h5>
+            <p class="card-text">@ViewBag.ActiveFeaturedList.Location | @ViewBag.ActiveFeaturedList.Price</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+    }
