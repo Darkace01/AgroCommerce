@@ -20,17 +20,19 @@ namespace AgroCommerce.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -55,6 +57,7 @@ namespace AgroCommerce.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public string Role { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -73,15 +76,41 @@ namespace AgroCommerce.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
+                    string buyerRole = "Buyer";
+                    string sellerRole = "Seller";
+                    //Buyer
+                    if (String.Compare(Input.Role, buyerRole) == 0)
+                    {
+                        if (!await _roleManager.RoleExistsAsync(buyerRole))
+                        {
+                            user.role = buyerRole;
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                            await _roleManager.CreateAsync(new IdentityRole(buyerRole));
+                        }
+                        await _userManager.AddToRoleAsync(user, buyerRole);
+                    }
+                    //seller sign Up
+                    else if (String.Compare(Input.Role, sellerRole) == 0)
+                    {
+                        if (!await _roleManager.RoleExistsAsync(sellerRole))
+                        {
+                            user.role = sellerRole;
+
+                            await _roleManager.CreateAsync(new IdentityRole(sellerRole));
+                        }
+                        await _userManager.AddToRoleAsync(user, sellerRole);
+                    }
+
+
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { userId = user.Id, code = code },
+                    //    protocol: Request.Scheme);
+
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
