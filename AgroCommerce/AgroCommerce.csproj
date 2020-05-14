@@ -21,9 +21,4 @@
     <ProjectReference Include="..\AgroCommerce.Services\AgroCommerce.Services.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
 </Project>
