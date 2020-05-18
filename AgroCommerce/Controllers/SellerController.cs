@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AgroCommerce.Core;
 using AgroCommerce.Services.Contracts;
+using AgroCommerce.Utilities;
 using AgroCommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,20 +52,37 @@ namespace AgroCommerce.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if(farm.ImagePath != null)
+                    var farmExist = _farmService.GetFarmByUserID(user.Id);
+                    if(farmExist == null)
                     {
-                        farm.ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg";
-                    }
+                        var file = farm.FarmLogoImage;
+                        if (farm.FarmLogoImage != null)
+                        {
+                            string uri = FileService.SaveImage(file, $"{farm.Name}/Icons");
+                            if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
+                                throw new Exception("File Save error");
 
-                    Farm _farm = new Farm()
+                            farm.ImagePath = uri;
+                        }
+                        else
+                        {
+                            throw new Exception("File not found");
+                        }
+
+                        Farm _farm = new Farm()
+                        {
+                            Name = farm.Name,
+                            Location = farm.Location,
+                            ImagePath = farm.ImagePath,
+                            ApplicationUserId = user.Id,
+                            IsActive = true,
+                        };
+                        _farmService.SetupFarm(_farm, user);
+                    }
+                    else
                     {
-                        Name = farm.Name,
-                        Location = farm.Location,
-                        ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg",
-                        ApplicationUserId = user.Id,
-                        IsActive = true,
-                    };
-                    _farmService.SetupFarm(_farm, user);
+                        RedirectToAction(nameof(Index));
+                    }
                 }
                 else
                 {
@@ -77,6 +95,65 @@ namespace AgroCommerce.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult EditFarm()
+        {
+            var user = GetLoggedInUser();
+
+            FarmAddViewModel farm = new FarmAddViewModel()
+            {
+                Name = string.IsNullOrEmpty(user.Farm.Name) ? "" : user.Farm.Name,
+                Location = string.IsNullOrEmpty(user.Farm.Location) ? "" : user.Farm.Location,
+                ImagePath = string.IsNullOrEmpty(user.Farm.ImagePath) ? "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg" : user.Farm.ImagePath
+            };
+            return View(farm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditFarm(FarmAddViewModel _farm)
+        {
+            var user = GetLoggedInUser();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var file = _farm.FarmLogoImage;
+                    if (_farm.FarmLogoImage != null)
+                    {
+                        string uri = FileService.SaveImage(file, $"{_farm.Name}/Icons");
+                        if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
+                            throw new Exception("File Save error");
+
+                        _farm.ImagePath = uri;
+                    }
+                    else
+                    {
+                        throw new Exception("File not found");
+                    }
+                    if (user.Farm == null)
+                        RedirectToAction(nameof(SetUpFarm));
+
+                    Farm farm = _farmService.GetByID(user.Farm.ID);
+                    farm.Name = _farm.Name;
+                    farm.Location = _farm.Location;
+                    farm.ImagePath = string.IsNullOrEmpty(_farm.ImagePath) ? farm.ImagePath : _farm.ImagePath;
+
+                    _farmService.UpdateFarm(farm);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(_farm);
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
+                throw;
+            }
         }
 
         #region Helper Methods

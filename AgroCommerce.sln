@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroCommerce", "AgroCommerce\AgroCommerce.csproj", "{06740000-2C41-470F-AF16-77CDF37A60CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroCommerce", "AgroCommerce\AgroCommerce.csproj", "{06740000-2C41-470F-AF16-77CDF37A60CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroCommerce.Data", "AgroCommerce.Data\AgroCommerce.Data.csproj", "{1720CFDB-938C-4AAF-99E3-8F942814EF30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroCommerce.Data", "AgroCommerce.Data\AgroCommerce.Data.csproj", "{1720CFDB-938C-4AAF-99E3-8F942814EF30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroCommerce.Core", "AgroCommerce.Core\AgroCommerce.Core.csproj", "{D8EEC05E-E2E0-4F69-B9C4-5257FF211C32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroCommerce.Core", "AgroCommerce.Core\AgroCommerce.Core.csproj", "{D8EEC05E-E2E0-4F69-B9C4-5257FF211C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroCommerce.Services", "AgroCommerce.Services\AgroCommerce.Services.csproj", "{88CC393A-019F-4BCE-BD6B-119634015422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroCommerce.Services", "AgroCommerce.Services\AgroCommerce.Services.csproj", "{88CC393A-019F-4BCE-BD6B-119634015422}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroCommerce.Utilities", "AgroCommerce.Utilities\AgroCommerce.Utilities.csproj", "{368F0A6F-7BFE-4949-8EC9-F258D54C80A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{88CC393A-019F-4BCE-BD6B-119634015422}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88CC393A-019F-4BCE-BD6B-119634015422}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88CC393A-019F-4BCE-BD6B-119634015422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{368F0A6F-7BFE-4949-8EC9-F258D54C80A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368F0A6F-7BFE-4949-8EC9-F258D54C80A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368F0A6F-7BFE-4949-8EC9-F258D54C80A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368F0A6F-7BFE-4949-8EC9-F258D54C80A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

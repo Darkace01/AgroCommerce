@@ -14,5 +14,6 @@ namespace AgroCommerce.Services.Contracts
         Farm GetByID(long Id);
         Task UpdateFarm(Farm farm);
         int GetAllFarmNumber(string id);
+        Farm GetFarmByUserID(string userId);
     }
 }

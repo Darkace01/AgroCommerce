@@ -19,6 +19,7 @@
     <ProjectReference Include="..\AgroCommerce.Core\AgroCommerce.Core.csproj" />
     <ProjectReference Include="..\AgroCommerce.Data\AgroCommerce.Data.csproj" />
     <ProjectReference Include="..\AgroCommerce.Services\AgroCommerce.Services.csproj" />
+    <ProjectReference Include="..\AgroCommerce.Utilities\AgroCommerce.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

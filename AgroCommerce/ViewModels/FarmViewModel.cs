@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,9 @@ namespace AgroCommerce.ViewModels
         public string Location { get; set; }
 
         public string ImagePath { get; set; }
+
+        [Display(Name = "Farm Logo")]
+        [DataType(DataType.Upload)]
+        public IFormFile FarmLogoImage { get; set; }
     }
 }

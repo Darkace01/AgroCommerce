@@ -33,6 +33,11 @@ namespace AgroCommerce.Services.Implementations
             return _uow.FarmRepo.Get(Id);
         }
 
+        public Farm GetFarmByUserID(string userId)
+        {
+            return _uow.FarmRepo.GetAll().Where(f => f.FarmOwner.Id == userId).FirstOrDefault();
+        }
+
         public async Task SetupFarm(Farm farm, ApplicationUser farmOwner)
         {
             farmOwner.IsAccountComplete = true;
