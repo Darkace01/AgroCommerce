@@ -53,7 +53,7 @@ namespace AgroCommerce.Controllers
                 if (ModelState.IsValid)
                 {
                     var farmExist = _farmService.GetFarmByUserID(user.Id);
-                    if(farmExist == null)
+                    if(farmExist != null)
                     {
                         var file = farm.FarmLogoImage;
                         if (farm.FarmLogoImage != null)

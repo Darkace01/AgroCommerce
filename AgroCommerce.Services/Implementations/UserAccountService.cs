@@ -24,16 +24,16 @@ namespace AgroCommerce.Services.Implementations
         }
         public int GetTotalNumberOfBuyers()
         {
-            return _uow.UserAccountRepo.GetAll().Where(u => u.role == "buyer").Count();
+            return _uow.UserAccountRepo.GetAllUsersWithRelationships().Where(u => u.role == "buyer").Count();
         }
         public int GetTotalNumberOfSellers()
         {
-            return _uow.UserAccountRepo.GetAll().Where(u => u.role == "seller").Count();
+            return _uow.UserAccountRepo.GetAllUsersWithRelationships().Where(u => u.role == "seller").Count();
         }
 
         public ApplicationUser GetById(string Id)
         {
-            return _uow.UserAccountRepo.Get(Id);
+            return _uow.UserAccountRepo.GetUserWithRelationships(Id);
         }
         public async Task Update(ApplicationUser user)
         {

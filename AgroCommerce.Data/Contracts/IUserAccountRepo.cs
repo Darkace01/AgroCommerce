@@ -7,5 +7,7 @@ namespace AgroCommerce.Data.Contracts
 {
     public interface IUserAccountRepo : ICoreRepo<ApplicationUser>
     {
+        IEnumerable<ApplicationUser> GetAllUsersWithRelationships();
+        ApplicationUser GetUserWithRelationships(string userId);
     }
 }
