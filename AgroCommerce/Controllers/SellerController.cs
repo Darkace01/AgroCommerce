@@ -7,10 +7,12 @@ using AgroCommerce.Core;
 using AgroCommerce.Services.Contracts;
 using AgroCommerce.Utilities;
 using AgroCommerce.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgroCommerce.Controllers
 {
+    [Authorize]
     public class SellerController : Controller
     {
         private readonly IUserAccountService _userAccountService;
@@ -37,7 +39,10 @@ namespace AgroCommerce.Controllers
         public IActionResult SetUpFarm()
         {
             var user = GetLoggedInUser();
+            if(user.IsAccountComplete == true)
+                 return RedirectToAction(nameof(Index));
 
+            
             FarmAddViewModel farm = new FarmAddViewModel();
             farm.ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg";
             return View(farm);
@@ -52,8 +57,7 @@ namespace AgroCommerce.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var farmExist = _farmService.GetFarmByUserID(user.Id);
-                    if(farmExist != null)
+                    if(user.IsAccountComplete == false)
                     {
                         var file = farm.FarmLogoImage;
                         if (farm.FarmLogoImage != null)
@@ -81,7 +85,7 @@ namespace AgroCommerce.Controllers
                     }
                     else
                     {
-                        RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index));
                     }
                 }
                 else
@@ -97,6 +101,7 @@ namespace AgroCommerce.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public IActionResult EditFarm()
         {
             var user = GetLoggedInUser();
@@ -155,6 +160,9 @@ namespace AgroCommerce.Controllers
                 throw;
             }
         }
+
+
+       
 
         #region Helper Methods
         private ApplicationUser GetLoggedInUser()

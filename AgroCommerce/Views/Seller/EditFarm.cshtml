@@ -5,7 +5,9 @@
 }
 
 <h1>Edit Farm</h1>
-
+@{
+    string url = "/" + Model.ImagePath.Remove(0,8);
+}
 
 <div class="row">
     <div class="col-md-6">
@@ -26,7 +28,7 @@
                 <label asp-for="ImagePath"></label>
             </div>
             <div class="col-md-4" style="margin-top: 30px">
-                <img alt="profile image" style="height:200px;width:200px;margin-bottom:10px" class="img-responsive companyLogo" id="targetImg" src="@Url.Content(Model.ImagePath)">
+                <img alt="profile image" style="height:200px;width:200px;margin-bottom:10px" class="img-responsive companyLogo" id="targetImg" src="@url">
 
                 <div class="">
                     <div class="input-group" style="margin-top: 32px;">
