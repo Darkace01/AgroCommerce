@@ -162,8 +162,19 @@ namespace AgroCommerce.Controllers
         }
 
 
-       
 
+        [HttpGet]
+        public IActionResult AddListing()
+        {
+            var user = GetLoggedInUser();
+
+            if (user.Farm.IsActive == false)
+            {
+                return NotFound();
+            }
+            ViewBag.AnimaTypes = _animalTypeService.GetAll();
+            return View();
+        }
         #region Helper Methods
         private ApplicationUser GetLoggedInUser()
         {
