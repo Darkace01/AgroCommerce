@@ -162,6 +162,15 @@ namespace AgroCommerce.Controllers
             }
         }
 
+        public IActionResult LoadClassAndBreed(int animalTypeId)
+        {
+            var animalType = _animalTypeService.GetByID(animalTypeId);
+            AnimalTypeClassBreedViewModel model = new AnimalTypeClassBreedViewModel();
+            model.Classes = animalType != null ? animalType.Class.Split(',').ToList() : new List<string>();
+            model.Breed = animalType != null ? animalType.Breed.Split(',').ToList() : new List<string>();
+
+            return Json(model);
+        }
 
 
         [HttpGet]

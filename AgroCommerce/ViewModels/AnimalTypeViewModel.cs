@@ -15,4 +15,11 @@ namespace AgroCommerce.ViewModels
         public string Class { get; set; }
         public string Breed { get; set; }
     }
+
+    public class AnimalTypeClassBreedViewModel
+    {
+        public List<string> Classes { get; set; }
+        public List<string> Breed { get; set; }
+
+    }
 }
