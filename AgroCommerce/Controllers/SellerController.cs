@@ -43,8 +43,9 @@ namespace AgroCommerce.Controllers
                  return RedirectToAction(nameof(Index));
 
             
-            FarmAddViewModel farm = new FarmAddViewModel();
-            farm.ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg";
+            FarmAddViewModel farm = new FarmAddViewModel() {
+                ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg"
+                };
             return View(farm);
         }
 
