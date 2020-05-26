@@ -31,6 +31,11 @@ namespace AgroCommerce.Controllers
             return View();
         }
 
+        public IActionResult AnimalTypes()
+        {
+            return View(_animalTypeService.GetAll());
+        }
+
         public IActionResult AddAnimalType()
         {
             return View();
@@ -91,7 +96,7 @@ namespace AgroCommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditAnimalType(AnimalTypeViewModel model, List<String> classTags, List<String> breedTags)
+        public IActionResult EditAnimalType(AnimalTypeViewModel model, List<String> classTags, List<String> breedTags)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +111,17 @@ namespace AgroCommerce.Controllers
                 _animalTypeService.UpdateAnimalType(animalType);
             }
             return RedirectToAction("AnimalTypes");
+        }
+
+        public IActionResult AnimalTypeDetails(int? id)
+        {
+            if (id == null) return new BadRequestResult();
+            AnimalType animalType = _animalTypeService.GetByID(id.Value);
+            if (animalType == null)
+            {
+                return NotFound();
+            }
+            return View(animalType);
         }
     }
 }
