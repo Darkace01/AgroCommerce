@@ -65,7 +65,7 @@ namespace AgroCommerce.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AnimalTypes));
         }
         
         public IActionResult EditAnimalType(int id = 0)
