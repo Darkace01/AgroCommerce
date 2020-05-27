@@ -25,7 +25,7 @@
     <link href="~/DashBoard/css/adminlte.min.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
-<body>
+<body style=" background-color:#e9ecef;">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -48,12 +48,13 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @RenderBody()
+        <main role="main" class="pb-0">
+            <div class="hold-transition login-page">
+                @RenderBody()
+            </div>
         </main>
-    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
