@@ -185,6 +185,26 @@ namespace AgroCommerce.Controllers
             ViewBag.AnimaTypes = _animalTypeService.GetAll();
             return View();
         }
+
+        [HttpGet]
+        public IActionResult UserImage()
+        {
+            string url = null;
+            var user = GetLoggedInUser();
+            if (user == null)
+                throw new Exception();
+            if (string.IsNullOrEmpty(user.ImagePath))
+            {
+                url = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg";
+            }
+            else
+            {
+                url = user.ImagePath;
+                url = url.Remove(0, 8);
+                url = "/" + url;
+            }
+            return Json(new { result = url, url = Url.Action(nameof(Index), "Store") });
+        }
         #region Helper Methods
         private ApplicationUser GetLoggedInUser()
         {
