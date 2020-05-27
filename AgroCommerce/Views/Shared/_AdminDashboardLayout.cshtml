@@ -79,7 +79,7 @@
 
                             <div class="image m-auto pl-0" id="partial-image">
                                 @*
-                                <partial name="_UserImage" /> *@
+                                    <partial name="_UserImage" /> *@
                             </div>
                             <div class="info m-auto">
                                 <p class="d-block mb-0">@DisplayName.UserName</p>
@@ -93,11 +93,10 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+                            with font-awesome or any other icon font library -->
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Store" asp-action="Dashboard">
-                                    @* <img src="~/Images/Icons/airplay.svg" /> *@
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">
                                     <i class="fas fa-th"></i>
                                     <p>
                                         Dashboard
@@ -107,11 +106,11 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Store"
-                                   asp-action="ViewAllProuductsAndServices">
+                                <a class="nav-link" asp-area="" asp-controller="Admin"
+                                   asp-action="AnimalTypes">
                                     <i class="fas fa-barcode"></i>
                                     <p>
-                                        Products - Services
+                                        Animal Types
                                     </p>
                                 </a>
 
@@ -147,24 +146,24 @@
                 &copy; 2020 - AgroCommerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
         </footer>
-        </div>
-        <style>
-            .main-footer {
-                background-color: #343a40 !important;
-                color: white !important;
-            }
+    </div>
+    <style>
+        .main-footer {
+            background-color: #343a40 !important;
+            color: white !important;
+        }
 
-            @@media screen and (max-width: 2000px) and (min-width: 520px) {
-                .main-footer {
-                    margin-left: 0rem !important;
-                }
+        @@media screen and (max-width: 2000px) and (min-width: 520px) {
+            .main-footer {
+                margin-left: 0rem !important;
             }
-        </style>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="~/DashBoard/js/adminlte.js"></script>
-        <script src="~/DashBoard/js/bootstrap.bundle.min.js"></script>
-        <script src="~/DashBoard/js/toastr.min.js"></script>
-        <script>
+        }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="~/DashBoard/js/adminlte.js"></script>
+    <script src="~/DashBoard/js/bootstrap.bundle.min.js"></script>
+    <script src="~/DashBoard/js/toastr.min.js"></script>
+    <script>
             var image = document.getElementById("partial-image");
             var img = document.createElement("img");
             img.classList.add('elevation-3');
@@ -181,7 +180,7 @@
                     console.log("lol" + error);
                 });
 
-        </script>
+    </script>
 </body>
 
 </html>
