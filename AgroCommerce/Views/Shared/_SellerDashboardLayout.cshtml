@@ -93,10 +93,11 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
-                            with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">
+                                <a class="nav-link" asp-area="" asp-controller="Seller" asp-action="Index">
+                                    @* <img src="~/Images/Icons/airplay.svg" /> *@
                                     <i class="fas fa-th"></i>
                                     <p>
                                         Dashboard
@@ -104,33 +105,34 @@
                                 </a>
 
                             </li>
+
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
                                     <i class="fas fa-inbox"></i>
                                     <p>
-                                        Animal Types
+                                        Farm
                                         <i class="fas fa-angle-left right"></i>
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Admin"
-                                           asp-action="AnimalTypes">
+                                        <a class="nav-link" asp-area="" asp-controller="Seller"
+                                           asp-action="SetUpFarm">
 
                                             <i class="fas fa-align-left"></i>
                                             <p>
-                                                View All
+                                                Set Up Farm
                                             </p>
                                         </a>
 
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Admin"
-                                           asp-action="AddAnimalType">
+                                        <a class="nav-link" asp-area="" asp-controller="Seller"
+                                           asp-action="EditFarm">
 
                                             <i class="fas fa-align-left"></i>
                                             <p>
-                                                Add New
+                                               Edit Farm
                                             </p>
                                         </a>
 
@@ -186,21 +188,21 @@
     <script src="~/DashBoard/js/bootstrap.bundle.min.js"></script>
     <script src="~/DashBoard/js/toastr.min.js"></script>
     <script>
-        var image = document.getElementById("partial-image");
-        var img = document.createElement("img");
-        img.classList.add('elevation-3');
-        img.classList.add('img-circle');
-        axios.get('/seller/userimage')
-            .then(function (response) {
-                console.log(response)
-                img.src = response.data.result;
-                image.appendChild(img);
-                console.log("wetin");
-            })
-            .catch(function (error) {
-                console.log(error);
-                console.log("lol" + error);
-            });
+            var image = document.getElementById("partial-image");
+            var img = document.createElement("img");
+            img.classList.add('elevation-3');
+            img.classList.add('img-circle');
+            axios.get('/seller/userimage')
+                .then(function (response) {
+                    console.log(response)
+                    img.src = response.data.result;
+                    image.appendChild(img);
+                    console.log("wetin");
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    console.log("lol" + error);
+                });
 
     </script>
 </body>
