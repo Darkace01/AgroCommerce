@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<AgroCommerce.Core.AnimalType>
 @{
     ViewData["Title"] = "AnimalTypes";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_DashBoardLayout.cshtml";
 }
 
 <h1>AnimalTypes</h1>
-<a asp-action="AddAnimalType" class="btn btn-info">Create New</a>
+<a asp-action="AddAnimalType" class="btn btn-info mb-3">Create New</a>
 <div class="table-responsive">
     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
