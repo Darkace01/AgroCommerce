@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AgroCommerce.Core;
 using AgroCommerce.Services.Contracts;
 using AgroCommerce.Utilities;
+using AgroCommerce.Utilities.CustomExceptions;
 using AgroCommerce.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,13 +66,13 @@ namespace AgroCommerce.Controllers
                         {
                             string uri = FileService.SaveImage(file, $"{farm.Name}/Icons");
                             if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
-                                throw new Exception("File Save error");
+                                throw new FileSaveErrorException();
 
                             farm.ImagePath = uri;
                         }
                         else
                         {
-                            throw new Exception("File not found");
+                            throw new NoFileFoundException();
                         }
 
                         Farm _farm = new Farm()
@@ -131,13 +132,13 @@ namespace AgroCommerce.Controllers
                     {
                         string uri = FileService.SaveImage(file, $"{_farm.Name}/Icons");
                         if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
-                            throw new Exception("File Save error");
+                            throw new FileSaveErrorException();
 
                         _farm.ImagePath = uri;
                     }
                     else
                     {
-                        throw new Exception("File not found");
+                        throw new NoFileFoundException();
                     }
                     if (user.Farm == null)
                         RedirectToAction(nameof(SetUpFarm));
@@ -202,7 +203,7 @@ namespace AgroCommerce.Controllers
                     {
                         string fileName = FileService.SaveImage(file, $"{farm.Name}/Listing/Animal/{model.Type}/");
                         if (string.IsNullOrEmpty(fileName) || string.IsNullOrWhiteSpace(fileName))
-                            throw new Exception("File Save error");
+                            throw new FileSaveErrorException();
 
                         model.ImagePath = fileName;
                     }
