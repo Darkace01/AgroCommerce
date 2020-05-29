@@ -186,6 +186,105 @@ namespace AgroCommerce.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddListing(AddListingViewModel model, string breed, string _class, int animalTypeId, string gender,
+            int listingYears = 0, int listingMonths = 0, int listingWeeks = 0)
+        {
+            var user = GetLoggedInUser();
+            var farm = _farmService.GetByID(user.Farm.ID);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var file = model.ImageFile;
+                    if (file != null)
+                    {
+                        string fileName = FileService.SaveImage(file, $"{farm.Name}/Listing/Animal/{model.Type}/");
+                        if (string.IsNullOrEmpty(fileName) || string.IsNullOrWhiteSpace(fileName))
+                            throw new Exception("File Save error");
+
+                        model.ImagePath = fileName;
+                    }
+                    else
+                    {
+                        throw new Exception("File not found");
+                    }
+                    string animalTypeName = "";
+                    if (animalTypeId < 1)
+                    {
+                        breed = "";
+                        _class = "";
+                        animalTypeName = "";
+                    }
+                    else
+                    {
+                        breed = breed == "-1" ? "" : breed;
+                        _class = _class == "-1" ? "" : _class;
+                        animalTypeName = _animalTypeService.GetByID(animalTypeId).Name;
+                    }
+
+                    //to ensure no negatives;
+                    listingYears = listingYears < 0 ? 0 : listingYears;
+                    listingMonths = listingMonths < 0 ? 0 : listingMonths;
+                    listingWeeks = listingWeeks < 0 ? 0 : listingWeeks;
+
+
+                    //age
+                    string listingAge = "";
+
+                    if (listingYears > 0)
+                    {
+                        listingAge = listingYears.ToString() + " years ";
+                    }
+                    if (listingMonths > 0)
+                    {
+                        listingAge = listingAge + listingMonths.ToString() + " months ";
+                    }
+                    if (listingWeeks > 0)
+                    {
+                        listingAge = listingAge + listingWeeks.ToString() + " weeks ";
+                    }
+
+                    int ageConvertedToWeeks = (listingYears * 52) + (listingMonths * 4) + listingWeeks;
+
+                    Listing listing = new Listing()
+                    {
+                        Title = model.Title,
+                        Description = model.Description,
+                        Price = model.Price,
+                        Location = model.Location,
+                        Age = listingAge + "old",
+                        AgeYear = listingYears,
+                        AgeMonth = listingMonths,
+                        AgeWeek = listingWeeks,
+                        AgeConvertedToWeeks = ageConvertedToWeeks,
+                        Gender = String.IsNullOrEmpty(gender) ? "None" : gender,
+                        AnimalType = animalTypeName,
+                        Breed = breed,
+                        Class = _class,
+                        ImagePath = model.ImagePath,
+                        FarmId = farm.ID,
+                        Farm = farm,
+
+                    };
+
+                    _listingService.Create(listing);
+                }
+                else
+                {
+                    ViewBag.InvalidModel = "one or more input is invalid";
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
+            }catch(Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
+                throw;
+            }
+           
+        }
+
         [HttpGet]
         public IActionResult UserImage()
         {
