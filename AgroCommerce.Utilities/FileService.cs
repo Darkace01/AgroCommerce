@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AgroCommerce.Utilities.CustomExceptions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 
@@ -12,10 +13,10 @@ namespace AgroCommerce.Utilities
             {
                 string ext = Path.GetExtension(file.FileName);
                 if (!CheckIfFileIsAnImage(ext.ToLower()))
-                    throw new Exception("File Too Large");
+                    throw new FileNotAnImageException();
 
                 if (!CheckFileSize(file))
-                    throw new Exception("File Too Large");
+                    throw new FileTooLargeException();
 
                 string uniqueFileName = "";
                 string uploadsFolder = "wwwroot/Images/" + folderName;
@@ -26,9 +27,9 @@ namespace AgroCommerce.Utilities
 
                 return filePath;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new FileSaveErrorException(ex.ToString());
             }
         }
 
@@ -43,7 +44,7 @@ namespace AgroCommerce.Utilities
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new FileDeleteErrorException(ex.ToString());
                 }
             }
 

@@ -23,6 +23,24 @@ namespace AgroCommerce.Utilities.CustomExceptions
     }
 
     [Serializable]
+    public class FileDeleteErrorException : Exception
+    {
+        public FileDeleteErrorException()
+        {
+        }
+
+        public FileDeleteErrorException(string message)
+            : base(message)
+        {
+        }
+
+        public FileDeleteErrorException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    [Serializable]
     public class NoFileFoundException : Exception
     {
         public NoFileFoundException()
