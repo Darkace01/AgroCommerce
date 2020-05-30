@@ -209,7 +209,7 @@ namespace AgroCommerce.Controllers
                     }
                     else
                     {
-                        throw new Exception("File not found");
+                        throw new NoFileFoundException();
                     }
                     string animalTypeName = "";
                     if (animalTypeId < 1)
