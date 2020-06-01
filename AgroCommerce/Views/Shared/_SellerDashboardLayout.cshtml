@@ -165,8 +165,8 @@
             <!-- Control sidebar content goes here -->
         </aside>
         <!-- /.control-sidebar -->
-        <footer class="border-top footer text-muted">
-            <div class="container">
+        <footer class="main-footer">
+            <div class="container text-center">
                 &copy; 2020 - AgroCommerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
         </footer>
@@ -194,14 +194,11 @@
             img.classList.add('img-circle');
             axios.get('/seller/userimage')
                 .then(function (response) {
-                    console.log(response)
                     img.src = response.data.result;
                     image.appendChild(img);
-                    console.log("wetin");
                 })
                 .catch(function (error) {
                     console.log(error);
-                    console.log("lol" + error);
                 });
 
     </script>

@@ -41,6 +41,24 @@ namespace AgroCommerce.Utilities.CustomExceptions
     }
 
     [Serializable]
+    public class FarmUpdateErrorException : Exception
+    {
+        public FarmUpdateErrorException()
+        {
+        }
+
+        public FarmUpdateErrorException(string message)
+            : base(message)
+        {
+        }
+
+        public FarmUpdateErrorException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    [Serializable]
     public class NoFarmFoundException : Exception
     {
         public NoFarmFoundException()

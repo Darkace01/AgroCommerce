@@ -41,6 +41,24 @@ namespace AgroCommerce.Utilities.CustomExceptions
     }
 
     [Serializable]
+    public class AnimalTypeUpdateErrorException : Exception
+    {
+        public AnimalTypeUpdateErrorException()
+        {
+        }
+
+        public AnimalTypeUpdateErrorException(string message)
+            : base(message)
+        {
+        }
+
+        public AnimalTypeUpdateErrorException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    [Serializable]
     public class NoAnimalTypeFoundException : Exception
     {
         public NoAnimalTypeFoundException()

@@ -1,0 +1,211 @@
+﻿@model AgroCommerce.ViewModels.AddListingViewModel
+@{
+    ViewData["Title"] = "AddListing";
+    Layout = "~/Views/Shared/_SellerDashboardLayout.cshtml";
+}
+
+<h1>Add Listing</h1>
+
+<script>
+     $(document).ready(function () {
+        $('#comboBoxAnimalType').on('change', function () {
+            var animalTypeId = $('#comboBoxAnimalType option:selected').val();
+            $.ajax({
+                type: 'GET',
+                data: { animalTypeId: animalTypeId },
+                url: '@Url.Action("LoadClassAndBreed","seller")',
+                success: function (result) {
+                    var c = '<option value="-1">Select Class</option>';
+                    for (var i = 0; i < result.Classes.length; i++) {
+                        c += '<option value="' + result.Classes[i] + '">' + result.Classes[i] + '</option>';
+                    }
+                    c += '<option value="-1">None</option>';
+
+                    var b = '<option value="-1">Select Breed</option>';
+                    for (var i = 0; i < result.Breed.length; i++) {
+                        b += '<option value="' + result.Breed[i] + '">' + result.Breed[i] + '</option>';
+                    }
+                    b += '<option value="-1">None</option>';
+
+                    $('#comboBoxClass').html(c);
+                    $('#comboBoxBreed').html(b);
+                }
+            });
+
+        });
+    });
+</script>
+<div class="pb-2">
+
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Age</label>
+
+            <div class="row" style="margin: 10px;">
+                <div class="col-md-3" style="margin-bottom: 10px">
+                    <input type="number" id="year" placeholder="years" class="form-control" min="0" name="listingYears">
+                </div>
+
+                <div class="col-md-3" style="margin-bottom: 10px">
+                    <input type="number" id="month" placeholder="months" class="form-control" min="0" name="listingMonths">
+                </div>
+
+                <div class="col-md-3" style="margin-bottom: 10px">
+                    <input type="number" id="week" placeholder="weeks" class="form-control" min="0" name="listingWeeks">
+                </div>
+                <h3 id="textShow" style="margin:0 20px;">0 years 0 months 0 weeks old</h3>
+
+            </div>
+            <p id="ageValidation" style="margin:0 10px;color:#dc3545"></p>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Gender</label>
+            <div class="col-md-10">
+                <select name="gender" class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Animal Type</label>
+            <div class="col-md-10">
+                <select name="animalTypeId" id="comboBoxAnimalType" class="form-control">
+                    <option value="-1">Select A Type</option>
+                    @foreach (var animalType in ViewBag.AnimaTypes)
+                    {
+                        <option value="@animalType.ID">@animalType.Name</option>
+                    }
+                    <option value="-1">None</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Class</label>
+            <div class="col-md-10">
+                <select name="_class" id="comboBoxClass" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Breed</label>
+            <div class="col-md-10">
+                <select name="breed" id="comboBoxBreed" class="form-control"></select>
+            </div>
+        </div>
+
+        <label class="control-label col-md-2">Listing Image</label>
+        <div class="col-md-4">
+
+            <img class="img-responsive" id="targetImg" style="height:250px;width:250px;margin-bottom:10px" src="@Url.Content("https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg")" />
+            <div class="btn btn-outline-primary">
+                <input type="file" id="imageBrowes" name="ImageFile" value="Change image" required />
+            </div>
+            <hr />
+
+            <div id="imgPreview" class="thumbnail" style="display:none">
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="createButton" onclick="return validate()">Set Up Farm</button>
+    </form>
+
+</div>
+<script>
+     $(document).ready(function () {
+        $("#imageBrowes").change(function () {
+            var File = this.files;
+            if (File && File[0]) {
+                ReadImage(File[0]);
+            }
+        })
+    })
+
+
+    var ReadImage = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+                $("#targetImg").attr('src', _file.target.result);
+                $("#imgPreview").show();
+            }
+        }
+    }
+
+
+    var year = document.getElementById("year");
+    var month = document.getElementById("month");
+    var week = document.getElementById("week");
+    var h3 = document.getElementById("textShow");
+
+
+    year.addEventListener("input", writeAge);
+    month.addEventListener("input", writeAge);
+    week.addEventListener("input", writeAge);
+
+    function writeAge() {
+        var valForYear = year.value;
+        var valForMonth = month.value;
+        var valForWeek = week.value;
+        
+        if (valForYear.length < 1) {
+            valForYear = 0;
+        }
+        if (valForMonth.length < 1) {
+            valForMonth = 0;
+        }
+        if (valForWeek.length < 1) {
+            valForWeek = 0;
+        }
+        h3.textContent = `${valForYear} years ${valForMonth} months ${valForWeek} weeks old`;
+        document.getElementById("ageValidation").textContent = "";
+        if ((year.value === "" || year.value == 0) && (month.value === "" || month.value == 0) &&
+            (week.value === "" || week.value == 0)) {
+            document.getElementById("ageValidation").textContent = "Age is required";            
+        }
+    }
+
+
+    var createButton = document.getElementById("createButton");
+    createButton.addEventListener("click", function () {
+        if ((year.value === "" || year.value == 0) && (month.value === "" || month.value == 0) &&
+            (week.value === "" || week.value == 0)){
+            document.getElementById("ageValidation").textContent = "Age is required";
+            year.focus();
+            event.returnValue = false;
+        }
+
+
+        if (year.value < 0 || month.value < 0 || week.value < 0) {
+            document.getElementById("ageValidation").textContent = "Age cannot be negative";
+            year.focus();
+            event.returnValue = false;
+        }
+    })
+</script>

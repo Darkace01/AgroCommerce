@@ -10,6 +10,7 @@ using AgroCommerce.Utilities.CustomExceptions;
 using AgroCommerce.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AgroCommerce.Controllers
 {
@@ -22,7 +23,8 @@ namespace AgroCommerce.Controllers
         private readonly IAnimalTypeService _animalTypeService;
         private readonly ITransactionService _transactionService;
         private readonly IReviewService _reviewService;
-        public SellerController(IUserAccountService userAccountService, IFarmService farmService, IListingService listingService, IAnimalTypeService animalTypeService, ITransactionService transactionService, IReviewService reviewService)
+        private readonly ILogger _logger;
+        public SellerController(IUserAccountService userAccountService, IFarmService farmService, IListingService listingService, IAnimalTypeService animalTypeService, ITransactionService transactionService, IReviewService reviewService, ILogger<SellerController> logger)
         {
             _userAccountService = userAccountService;
             _farmService = farmService;
@@ -30,6 +32,7 @@ namespace AgroCommerce.Controllers
             _animalTypeService = animalTypeService;
             _transactionService = transactionService;
             _reviewService = reviewService;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -96,6 +99,7 @@ namespace AgroCommerce.Controllers
                 }
             }catch(Exception ex)
             {
+                _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/SetUpFarm\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator."+ex);
                 throw;
             }
@@ -158,6 +162,7 @@ namespace AgroCommerce.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/EditFarm\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
                 throw;
             }
@@ -280,6 +285,7 @@ namespace AgroCommerce.Controllers
                 return RedirectToAction(nameof(Index));
             }catch(Exception ex)
             {
+                _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/AddListing\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
                 throw;
             }
