@@ -18,11 +18,6 @@ namespace AgroCommerce.Services.Implementations
             this._uow = uow as UnitOfWork;
         }
 
-        public async Task SaveChanges()
-        {
-            await _uow.Save();
-        }
-
         public IEnumerable<Farm> GetAll()
         {
             return _uow.FarmRepo.GetAll();

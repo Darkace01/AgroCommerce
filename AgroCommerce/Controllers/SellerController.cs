@@ -164,7 +164,7 @@ namespace AgroCommerce.Controllers
             {
                 _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/EditFarm\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
-                throw;
+                return View();
             }
         }
 

@@ -9,7 +9,6 @@ namespace AgroCommerce.Services.Contracts
     public interface IFarmService
     {
         Task SetupFarm(Farm farm, ApplicationUser farmOwner);
-        Task SaveChanges();
         IEnumerable<Farm> GetAll();
         Farm GetByID(long Id);
         Task UpdateFarm(Farm farm);
