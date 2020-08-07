@@ -30,17 +30,18 @@ namespace AgroCommerce.Services.Implementations
 
         public Farm GetFarmByUserID(string userId)
         {
-            return _uow.FarmRepo.GetAll().Where(f => f.FarmOwner.Id == userId).FirstOrDefault();
+            return _uow.FarmRepo.GetAll().Where(f => f.ApplicationUserId == userId).FirstOrDefault();
         }
 
         public async Task SetupFarm(Farm farm, ApplicationUser farmOwner)
         {
             farmOwner.IsAccountComplete = true;
-            _uow.UserAccountRepo.Update(farmOwner);
+            farmOwner.Farm = farm;
 
-            farm.FarmOwner = farmOwner;
+            //farm.FarmOwner = farmOwner;
             _uow.FarmRepo.Add(farm);
 
+            _uow.UserAccountRepo.Update(farmOwner);
             await _uow.Save();
         }
 

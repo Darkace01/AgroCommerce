@@ -71,7 +71,7 @@ namespace AgroCommerce
                             Name = "Segun Tokede Farm",
                             Location = "Iyana Ipaja",
                             ApplicationUserId = seller.Id,
-                            FarmOwner = seller,
+                            //FarmOwner = seller,
                             IsActive = true,
                         };
 

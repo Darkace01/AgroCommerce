@@ -13,7 +13,7 @@ namespace AgroCommerce.Core
 
         public string ApplicationUserId { get; set; }
         [Required]
-        public virtual ApplicationUser FarmOwner { get; set; }
+        //public virtual ApplicationUser FarmOwner { get; set; }
         public virtual List<Listing> Listings { get; set; }
 
         public string ImagePath { get; set; }
