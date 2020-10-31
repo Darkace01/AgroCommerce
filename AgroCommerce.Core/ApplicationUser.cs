@@ -31,7 +31,7 @@ namespace AgroCommerce.Core
 
         [Display(Name = "Upload Image")]
         public string ImagePath { get; set; }
-        public virtual Farm Farm { get; set; }
+        public virtual long FarmId { get; set; }
         public virtual List<Review> Reviews { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 

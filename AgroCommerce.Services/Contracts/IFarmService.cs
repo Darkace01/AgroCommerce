@@ -11,7 +11,7 @@ namespace AgroCommerce.Services.Contracts
         Task SetupFarm(Farm farm, ApplicationUser farmOwner);
         IEnumerable<Farm> GetAll();
         Farm GetByID(long Id);
-        Task UpdateFarm(Farm farm);
+        Task UpdateFarm(Farm farm, ApplicationUser farmOwner);
         int GetAllFarmNumber(string id);
         Farm GetFarmByUserID(string userId);
     }

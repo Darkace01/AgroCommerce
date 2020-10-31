@@ -58,6 +58,26 @@ namespace AgroCommerce.Tests.UnitTest.Services
             }
         }
 
+        [Fact]
+        public void UpdateFarm_ShouldUpdateFarmData(){
+            using(var context = GetSampleData(nameof(UpdateFarm_ShouldUpdateFarmData))){
+                //Arrange
+                var farmService = MockFarmService(context);
+                var userService = MockUserService(context);
+                var dataFactory = new DataFactory();
+                var farm = dataFactory.GetFarm(654700467436, "Farm 2", "imagepath", "2efhi-556abc-43frs-Gdh4", "location", true);
+                var owner = dataFactory.GetSellerUser("2efhi-556abc-43frs-Gdh4", "seller@gmail.com", "seller", "sellerFirst", "sellerLast", "Ade123dfja;sdfhad=asdfhad;fjdadf", "seller", "imagepath");
+
+                //Act
+                // userService.Update(owner);
+                farmService.UpdateFarm(farm,owner);
+                var getFarm = farmService.GetByID(654700467436);
+
+                //Assert
+                Assert.Equal("Farm 2", getFarm.Name);
+            }
+        }
+
 
         #region helpers
         private IFarmService MockFarmService(ApplicationDbContext context)

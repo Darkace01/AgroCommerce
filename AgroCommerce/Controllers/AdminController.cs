@@ -63,7 +63,7 @@ namespace AgroCommerce.Controllers
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator." + ex);
             }
             return RedirectToAction(nameof(AnimalTypes));
         }

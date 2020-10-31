@@ -53,7 +53,7 @@ namespace AgroCommerce.Services.Implementations
 
         public ApplicationUser GetByFarmID(long id)
         {
-            return _uow.UserAccountRepo.Find(u => u.Farm.ID == id).FirstOrDefault();
+            return _uow.UserAccountRepo.Find(u => u.FarmId== id).FirstOrDefault();
         }
 
         public ApplicationUser GetUSerByPhoneNumber(string phoneNumber)

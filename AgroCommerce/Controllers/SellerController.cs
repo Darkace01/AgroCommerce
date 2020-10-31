@@ -40,18 +40,20 @@ namespace AgroCommerce.Controllers
             return View();
         }
 
+
         public IActionResult SetUpFarm()
         {
             var user = GetLoggedInUser();
-            if(user.IsAccountComplete == true)
-                 return RedirectToAction(nameof(Index));
+            if (user.IsAccountComplete) return RedirectToAction(nameof(EditFarm));
 
-            
-            FarmAddViewModel farm = new FarmAddViewModel() {
+
+            FarmAddViewModel farm = new FarmAddViewModel()
+            {
                 ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg"
-                };
+            };
             return View(farm);
         }
+
 
         [HttpPost]
         public IActionResult SetUpFarm(FarmAddViewModel farm)
@@ -62,7 +64,7 @@ namespace AgroCommerce.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if(user.IsAccountComplete == false)
+                    if (user.IsAccountComplete == false)
                     {
                         var file = farm.FarmLogoImage;
                         if (farm.FarmLogoImage != null)
@@ -97,28 +99,33 @@ namespace AgroCommerce.Controllers
                 {
                     return View(farm);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/SetUpFarm\n");
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator."+ex);
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
                 throw;
             }
 
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpGet]
         public IActionResult EditFarm()
         {
             var user = GetLoggedInUser();
+            var farm = _farmService.GetFarmByUserID(user.Id);
+            if (farm == null)
+                return RedirectToAction(nameof(SetUpFarm));
 
-            FarmAddViewModel farm = new FarmAddViewModel()
+            FarmAddViewModel Farm = new FarmAddViewModel()
             {
-                Name = string.IsNullOrEmpty(user.Farm.Name) ? "" : user.Farm.Name,
-                Location = string.IsNullOrEmpty(user.Farm.Location) ? "" : user.Farm.Location,
-                ImagePath = string.IsNullOrEmpty(user.Farm.ImagePath) ? "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg" : user.Farm.ImagePath
+                Name = string.IsNullOrEmpty(farm.Name) ? "" : farm.Name,
+                Location = string.IsNullOrEmpty(farm.Location) ? "" : farm.Location,
+                ImagePath = string.IsNullOrEmpty(farm.ImagePath) ? "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg" : farm.ImagePath
             };
-            return View(farm);
+            return View(Farm);
         }
 
         [HttpPost]
@@ -126,7 +133,9 @@ namespace AgroCommerce.Controllers
         public IActionResult EditFarm(FarmAddViewModel _farm)
         {
             var user = GetLoggedInUser();
-
+            var oldFarm = _farmService.GetFarmByUserID(user.Id);
+            if (oldFarm == null)
+                return RedirectToAction(nameof(SetUpFarm));
             try
             {
                 if (ModelState.IsValid)
@@ -142,17 +151,18 @@ namespace AgroCommerce.Controllers
                     }
                     else
                     {
-                        throw new NoFileFoundException();
+                        // throw new NoFileFoundException();
+                        _farm.ImagePath = oldFarm.ImagePath;
                     }
-                    if (user.Farm == null)
+                    if (oldFarm == null)
                         RedirectToAction(nameof(SetUpFarm));
 
-                    Farm farm = _farmService.GetByID(user.Farm.ID);
+                    Farm farm = _farmService.GetByID(oldFarm.ID);
                     farm.Name = _farm.Name;
                     farm.Location = _farm.Location;
                     farm.ImagePath = string.IsNullOrEmpty(_farm.ImagePath) ? farm.ImagePath : _farm.ImagePath;
 
-                    _farmService.UpdateFarm(farm);
+                    _farmService.UpdateFarm(farm, user);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -160,7 +170,7 @@ namespace AgroCommerce.Controllers
                     return View(_farm);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/EditFarm\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
@@ -183,11 +193,12 @@ namespace AgroCommerce.Controllers
         public IActionResult AddListing()
         {
             var user = GetLoggedInUser();
-
-            if (user.Farm.IsActive == false)
-            {
-                return NotFound();
-            }
+            var farm = _farmService.GetFarmByUserID(user.Id);
+            if (farm == null)
+                if (farm.IsActive == false)
+                {
+                    return NotFound();
+                }
             ViewBag.AnimaTypes = _animalTypeService.GetAll();
             return View();
         }
@@ -198,7 +209,7 @@ namespace AgroCommerce.Controllers
             int listingYears = 0, int listingMonths = 0, int listingWeeks = 0)
         {
             var user = GetLoggedInUser();
-            var farm = _farmService.GetByID(user.Farm.ID);
+            var farm = _farmService.GetFarmByUserID(user.Id);
             try
             {
                 if (ModelState.IsValid)
@@ -283,13 +294,14 @@ namespace AgroCommerce.Controllers
                     return View();
                 }
                 return RedirectToAction(nameof(Index));
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"\n{DateTime.Now} Error occured in Seller/AddListing\n");
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
                 throw;
             }
-           
+
         }
 
         [HttpGet]

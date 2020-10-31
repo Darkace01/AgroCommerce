@@ -36,7 +36,7 @@ namespace AgroCommerce.Services.Implementations
         public async Task SetupFarm(Farm farm, ApplicationUser farmOwner)
         {
             farmOwner.IsAccountComplete = true;
-            farmOwner.Farm = farm;
+            farmOwner.FarmId = farm.ID;
 
             //farm.FarmOwner = farmOwner;
             _uow.FarmRepo.Add(farm);
@@ -45,9 +45,12 @@ namespace AgroCommerce.Services.Implementations
             await _uow.Save();
         }
 
-        public async Task UpdateFarm(Farm farm)
+        public async Task UpdateFarm(Farm farm, ApplicationUser farmOwner)
         {
+            farmOwner.FarmId = farm.ID;
+            
             _uow.FarmRepo.Update(farm);
+            _uow.UserAccountRepo.Update(farmOwner);
             await _uow.Save();
         }
 

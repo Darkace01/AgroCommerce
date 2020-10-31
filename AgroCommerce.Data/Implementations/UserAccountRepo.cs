@@ -21,7 +21,7 @@ namespace AgroCommerce.Data.Implementations
         public IEnumerable<ApplicationUser> GetAllUsersWithRelationships()
         {
             return _DbSet
-                .Include(c => c.Farm)
+                //.Include(c => c.Farm)
                 .Include(c => c.Reviews)
                 .Include(c => c.Transactions)
                 .ToList();
@@ -31,7 +31,7 @@ namespace AgroCommerce.Data.Implementations
         {
             return _DbSet
                 .Where(c => c.Id == userId)
-                .Include(c => c.Farm)
+                //.Include(c => c.Farm)
                 .Include(c => c.Reviews)
                 .Include(c => c.Transactions)
                 .FirstOrDefault();
