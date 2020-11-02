@@ -59,13 +59,14 @@ namespace AgroCommerce.Controllers
                     };
 
                     _animalTypeService.Create(animalType);
+                    return RedirectToAction(nameof(AnimalTypes));
                 }
             }
             catch(Exception ex)
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator." + ex);
             }
-            return RedirectToAction(nameof(AnimalTypes));
+            return View(model);
         }
         
         public IActionResult EditAnimalType(int id = 0)
@@ -98,19 +99,27 @@ namespace AgroCommerce.Controllers
         [HttpPost]
         public IActionResult EditAnimalType(AnimalTypeViewModel model, List<String> classTags, List<String> breedTags)
         {
-            if (ModelState.IsValid)
+            try
             {
+                if (ModelState.IsValid)
+                {
 
-                string classT = classTags != null ? String.Join(",", classTags) : "";
-                string breedT = breedTags != null ? String.Join(",", breedTags) : "";
-                AnimalType animalType = _animalTypeService.GetByID(model.ID);
-                animalType.Name = model.Name;
-                animalType.Class = classT;
-                animalType.Breed = breedT;
+                    string classT = classTags != null ? String.Join(",", classTags) : "";
+                    string breedT = breedTags != null ? String.Join(",", breedTags) : "";
+                    AnimalType animalType = _animalTypeService.GetByID(model.ID);
+                    animalType.Name = model.Name;
+                    animalType.Class = classT;
+                    animalType.Breed = breedT;
 
-                _animalTypeService.UpdateAnimalType(animalType);
+                    _animalTypeService.UpdateAnimalType(animalType);
+                    return RedirectToAction(nameof(AnimalTypes));
+                }
             }
-            return RedirectToAction("AnimalTypes");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to update changes. Try again, and if the problem persists see your system administrator." + ex);
+            }
+            return View(model);
         }
 
         public IActionResult AnimalTypeDetails(int? id)
