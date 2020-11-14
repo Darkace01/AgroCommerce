@@ -93,7 +93,7 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                            with font-awesome or any other icon font library -->
 
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Seller" asp-action="Index">
@@ -132,7 +132,7 @@
 
                                             <i class="fas fa-align-left"></i>
                                             <p>
-                                               Edit Farm
+                                                Edit Farm
                                             </p>
                                         </a>
 
@@ -183,23 +183,24 @@
             }
         }
     </style>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="~/js/axios.min.js"></script>
+    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
     <script src="~/DashBoard/js/adminlte.js"></script>
     <script src="~/DashBoard/js/bootstrap.bundle.min.js"></script>
     <script src="~/DashBoard/js/toastr.min.js"></script>
     <script>
-            var image = document.getElementById("partial-image");
-            var img = document.createElement("img");
-            img.classList.add('elevation-3');
-            img.classList.add('img-circle');
-            axios.get('/seller/userimage')
-                .then(function (response) {
-                    img.src = response.data.result;
-                    image.appendChild(img);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+        var image = document.getElementById("partial-image");
+        var img = document.createElement("img");
+        img.classList.add('elevation-3');
+        img.classList.add('img-circle');
+        axios.get('/seller/userimage')
+            .then(function (response) {
+                img.src = response.data.result;
+                image.appendChild(img);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
     </script>
 </body>

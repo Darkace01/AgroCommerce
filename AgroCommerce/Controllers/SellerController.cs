@@ -178,15 +178,7 @@ namespace AgroCommerce.Controllers
             }
         }
 
-        public IActionResult LoadClassAndBreed(int animalTypeId)
-        {
-            var animalType = _animalTypeService.GetByID(animalTypeId);
-            AnimalTypeClassBreedViewModel model = new AnimalTypeClassBreedViewModel();
-            model.Classes = animalType != null ? animalType.Class.Split(',').ToList() : new List<string>();
-            model.Breed = animalType != null ? animalType.Breed.Split(',').ToList() : new List<string>();
-
-            return Json(model);
-        }
+        
 
 
         [HttpGet]
@@ -287,13 +279,14 @@ namespace AgroCommerce.Controllers
                     };
 
                     _listingService.Create(listing);
+                    return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     ViewBag.InvalidModel = "one or more input is invalid";
                     return View();
                 }
-                return RedirectToAction(nameof(Index));
+               
             }
             catch (Exception ex)
             {
@@ -304,6 +297,8 @@ namespace AgroCommerce.Controllers
 
         }
 
+
+        #region Helper Methods
         [HttpGet]
         public IActionResult UserImage()
         {
@@ -323,7 +318,17 @@ namespace AgroCommerce.Controllers
             }
             return Json(new { result = url, url = Url.Action(nameof(Index), "Store") });
         }
-        #region Helper Methods
+
+        public ActionResult LoadClassAndBreed(int animalTypeId)
+        {
+            var animalType = _animalTypeService.GetByID(animalTypeId);
+            AnimalTypeClassBreedViewModel model = new AnimalTypeClassBreedViewModel();
+            model.Classes = animalType != null ? animalType.Class.Split(',').ToList() : new List<string>();
+            model.Breed = animalType != null ? animalType.Breed.Split(',').ToList() : new List<string>();
+
+            return Json(model);
+        }
+
         private ApplicationUser GetLoggedInUser()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

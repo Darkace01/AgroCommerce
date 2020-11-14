@@ -5,28 +5,33 @@
 }
 
 <h1>Add Listing</h1>
-
+<script src="~/js/axios.min.js"></script>
 <script>
+    axios.get('loadclassandbreed/4')
+        .then(function (response) {
+            console.log(response);
+        });
+
      $(document).ready(function () {
         $('#comboBoxAnimalType').on('change', function () {
             var animalTypeId = $('#comboBoxAnimalType option:selected').val();
+            
             $.ajax({
                 type: 'GET',
                 data: { animalTypeId: animalTypeId },
                 url: '@Url.Action("LoadClassAndBreed","seller")',
-                success: function (result) {
-                    var c = '<option value="-1">Select Class</option>';
-                    for (var i = 0; i < result.Classes.length; i++) {
-                        c += '<option value="' + result.Classes[i] + '">' + result.Classes[i] + '</option>';
+                success: function (response) {
+                    var c = '<option value="-1">select class</option>';
+                    for (var i = 0; i < response.classes.length; i++) {
+                        c += '<option value="' + response.classes[i] + '">' + response.classes[i] + '</option>';
                     }
-                    c += '<option value="-1">None</option>';
+                    c += '<option value="-1">none</option>';
 
-                    var b = '<option value="-1">Select Breed</option>';
-                    for (var i = 0; i < result.Breed.length; i++) {
-                        b += '<option value="' + result.Breed[i] + '">' + result.Breed[i] + '</option>';
+                    var b = '<option value="-1">select breed</option>';
+                    for (var i = 0; i < response.breed.length; i++) {
+                        b += '<option value="' + response.breed[i] + '">' + response.breed[i] + '</option>';
                     }
-                    b += '<option value="-1">None</option>';
-
+                    b += '<option value="-1">none</option>';
                     $('#comboBoxClass').html(c);
                     $('#comboBoxBreed').html(b);
                 }
