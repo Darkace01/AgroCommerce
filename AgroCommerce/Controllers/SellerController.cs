@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -297,6 +298,162 @@ namespace AgroCommerce.Controllers
 
         }
 
+        public IActionResult EditListing(int? Id)
+        {
+            if (Id.Value == null)
+                return NotFound();
+            ViewBag.AnimalTypes = _animalTypeService.GetAll();
+            var user = GetLoggedInUser();
+            var farm = _farmService.GetFarmByUserID(user.Id);
+            var _listing = _listingService.GetByID(Id.Value);
+
+            if (_listing == null && _listing.Farm.ApplicationUserId != user.Id)
+                return NotFound();
+
+            EditListingViewModel listing = new EditListingViewModel()
+            {
+                ID = _listing.ID,
+                Title = _listing.Title,
+                Description = _listing.Description,
+                Price = _listing.Price,
+                Location = _listing.Location,
+                ImagePath = _listing.ImagePath,
+                Farm = farm
+            };
+
+            ViewBag.SelectedAnimalType = _listing.AnimalType;
+            ViewBag.SelectedAnimalTypeID = String.IsNullOrEmpty(_listing.AnimalType) ? 0 : _animalTypeService.GetIdByAnimalTypeName(_listing.AnimalType);
+            ViewBag.SelectedClass = _listing.Class;
+            ViewBag.SelectedBreed = _listing.Breed;
+            ViewBag.SelectedGender = _listing.Gender;
+
+            ViewBag.AgeYear = _listing.AgeYear;
+            ViewBag.AgeMonth = _listing.AgeMonth;
+            ViewBag.AgeWeek = _listing.AgeWeek;
+
+            return View(listing);
+        }
+
+        [HttpPost]
+        public IActionResult EditListing(EditListingViewModel model, int animalTypeId, string _class, string breed, string gender, int listingYears = 0, int listingMonths = 0, int listingWeeks = 0)
+        {
+            var user = GetLoggedInUser();
+            var farm = _farmService.GetFarmByUserID(user.Id);
+
+            var file = model.ImageFile;
+            if (file != null)
+            {
+                string uri = FileService.SaveImage(file, $"{farm.Name + "_" + farm.ID}/Logo");
+                if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
+                    throw new FileSaveErrorException();
+
+                model.ImagePath = uri;
+            }
+            else
+            {
+                model.ImagePath = "https://image.freepik.com/free-vector/farmer-peasant-illustration-man-with-beard-spade-farmland_33099-575.jpg";
+            }
+            
+            Listing listing = _listingService.GetByID(model.ID);
+
+            if (listing == null)
+            {
+                return NotFound();
+            }
+
+            string animalTypeName = "";
+            if (animalTypeId < 1)
+            {
+                breed = "";
+                _class = "";
+                animalTypeName = "";
+            }
+            else
+            {
+                breed = breed == "-1" ? "" : breed;
+                _class = _class == "-1" ? "" : _class;
+                animalTypeName = _animalTypeService.GetByID(animalTypeId).Name;
+            }
+
+            //to ensure no negatives;
+            listingYears = listingYears < 0 ? 0 : listingYears;
+            listingMonths = listingMonths < 0 ? 0 : listingMonths;
+            listingWeeks = listingWeeks < 0 ? 0 : listingWeeks;
+
+            int ageConvertedToWeeks = (listingYears * 52) + (listingMonths * 4) + listingWeeks;
+            //age
+            string listingAge = "";
+
+            if (listingYears > 0)
+            {
+                listingAge = listingYears.ToString() + " years ";
+            }
+            if (listingMonths > 0)
+            {
+                listingAge = listingAge + listingMonths.ToString() + " months ";
+            }
+            if (listingWeeks > 0)
+            {
+                listingAge = listingAge + listingWeeks.ToString() + " weeks ";
+            }
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    listing.Title = model.Title;
+                    listing.Description = model.Description;
+                    listing.Price = model.Price;
+                    listing.Location = model.Location;
+                    listing.Age = listingAge + " old";
+                    listing.AgeYear = listingYears;
+                    listing.AgeMonth = listingMonths;
+                    listing.AgeWeek = listingWeeks;
+                    listing.AgeConvertedToWeeks = ageConvertedToWeeks;
+                    listing.Gender = String.IsNullOrEmpty(gender) ? "None" : gender;
+                    listing.AnimalType = animalTypeName;
+                    listing.Breed = breed;
+                    listing.Class = _class;
+                    listing.ImagePath = String.IsNullOrEmpty(model.ImagePath) ? listing.ImagePath : model.ImagePath;
+                    listing.Farm = farm;
+                    _listingService.UpdateListing(listing);
+
+                    return RedirectToAction(nameof(listing));
+                }
+                else
+                {
+                    ViewBag.InvalidModel = "one or more input is invalid";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists contact the administrator." + ex);
+                throw;
+            }
+            return RedirectToAction(nameof(listing));
+        }
+
+        public IActionResult Listing()
+        {
+            var farm = _farmService.GetFarmByUserID(GetLoggedInUser().Id);
+            var listing = _listingService.GetByFarm(farm.ID);
+
+
+            IEnumerable<ViewLisitingViewModel> listingList = listing
+                .Select(l => new ViewLisitingViewModel()
+                {
+                    Title = l.Title,
+                    Price = l.Price,
+                    Location = l.Location,
+                    Description = l.Description,
+                    AnimalType = l.AnimalType,
+                    Age = l.Age,
+                    Gender = l.Gender,
+                    ID = l.ID
+                }).OrderBy(o => o.ID).ToList();
+            return View(listingList);
+        }
+
 
         #region Helper Methods
         [HttpGet]
@@ -316,13 +473,13 @@ namespace AgroCommerce.Controllers
                 url = url.Remove(0, 8);
                 url = "/" + url;
             }
-            return Json(new { result = url, url = Url.Action(nameof(Index), "Store") });
+            return Json(new { result = url, url = Url.Action(nameof(Index), "Seller") });
         }
 
         public ActionResult LoadClassAndBreed(int animalTypeId)
         {
             var animalType = _animalTypeService.GetByID(animalTypeId);
-            AnimalTypeClassBreedViewModel model = new AnimalTypeClassBreedViewModel();
+            var model = new AnimalTypeClassBreedViewModel();
             model.Classes = animalType != null ? animalType.Class.Split(',').ToList() : new List<string>();
             model.Breed = animalType != null ? animalType.Breed.Split(',').ToList() : new List<string>();
 
